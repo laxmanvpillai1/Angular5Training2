@@ -22,23 +22,33 @@ export class BugTrackerComponent implements OnInit {
 
 
   ngOnInit() {
+    let windowStorageLength: number = window.localStorage.length;
+    for(let i=0; i<windowStorageLength; i++){
+      this.bugs[i] = JSON.parse(window.localStorage.getItem( window.localStorage.key(i)));
+    }
   }
 
   onClickAddNew(bugName: string){
     
-    let bug:BugModel = this.bugServices.createNew(bugName);
+    let bugId: string = 'bug' + (window.localStorage.length +1);
+    let bug:BugModel = this.bugServices.createNew(bugId, bugName);
     this.bugs = [...this.bugs, bug];
+    
   }
 
   onClickBugName(oldBug: BugModel){
     let newBug: BugModel = this.bugServices.toggle(oldBug); 
-    //bug.isClosed = !bug.isClosed;
-    this.bugs = this.bugs.map(bug => bug === oldBug? newBug: oldBug );
+    this.bugs = this.bugs.map(bug => bug === oldBug? newBug: bug );
+    window.localStorage.setItem(oldBug.bugId,JSON.stringify(newBug));
+
   }
 
   onClickRemoveClosed(){
+    let closedBugs: BugModel[] = this.bugs.filter(bug=>bug.isClosed);
     this.bugs = this.bugs.filter(bug=>!bug.isClosed);
-   
+    closedBugs.forEach(bug => {
+      window.localStorage.removeItem(bug.bugId);
+    });
   }
 
   getClosedBugCount(): number{
