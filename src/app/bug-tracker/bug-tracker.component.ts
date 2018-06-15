@@ -27,12 +27,13 @@ export class BugTrackerComponent implements OnInit {
   onClickAddNew(bugName: string){
     
     let bug:BugModel = this.bugServices.createNew(bugName);
-    this.bugs.push(bug)
+    this.bugs = [...this.bugs, bug];
   }
 
-  onClickBugName(bug: BugModel){
-    bug.isClosed = !bug.isClosed;
-    
+  onClickBugName(oldBug: BugModel){
+    let newBug: BugModel = this.bugServices.toggle(oldBug); 
+    //bug.isClosed = !bug.isClosed;
+    this.bugs = this.bugs.map(bug => bug === oldBug? newBug: oldBug );
   }
 
   onClickRemoveClosed(){

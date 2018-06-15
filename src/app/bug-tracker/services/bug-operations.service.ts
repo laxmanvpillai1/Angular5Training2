@@ -17,4 +17,9 @@ export class BugOperationsService {
     let bug:BugModel = new BugModel(bugName, currentDate);
     return bug;
   }
+
+  toggle(bugToToggle: BugModel): BugModel{
+    let newBug: BugModel = {...bugToToggle, isClosed : !bugToToggle.isClosed};
+    return newBug;
+  }
 }
