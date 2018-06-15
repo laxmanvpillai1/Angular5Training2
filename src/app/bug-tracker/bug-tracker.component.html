@@ -8,12 +8,12 @@
 	</section>
 	<section class="sort">
 		<label for="">Order By :</label>
-		<select name="" id="">
-			<option value=""></option>
-			<option value=""></option>
+		<select name="" id="" (change)='bugSortAttribute = $event.target.value'>
+			<option value="bugName">Name</option>
+			<option value="isClosed">Status</option>
 		</select>
 		<label for="">Descending ? :</label>
-		<input type="checkbox" name="" id="">
+		<input type="checkbox" name="" id="" (change)='bugSortDirection = $event.target.checked? -1 : 1'>
 	</section>
 	<section class="edit">
 		<label for="">Bug Name :</label>
@@ -22,8 +22,8 @@
 	</section>
 	<section class="list">
 		<ol>
-			<li *ngFor='let bug of bugs'>
-				<span class="bugname" (click)='onClickBugName(bug)' [ngClass]="bug.isClosed?'closed':'open'">{{bug.bugName}}</span>
+			<li *ngFor='let bug of (bugs|sortBugs:bugSortAttribute:bugSortDirection)'>
+				<span class="bugname" (click)='onClickBugName(bug)' [ngClass]="bug.isClosed?'closed':'open'">{{bug.bugName | trimTextPipe:40}}</span>
 				<div class="datetime">{{bug.createdAt | date:'short'}}</div>
 			</li>
 			

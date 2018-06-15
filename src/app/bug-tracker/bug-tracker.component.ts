@@ -12,7 +12,10 @@ export class BugTrackerComponent implements OnInit {
   
   bugs: BugModel[] = [];
   bugServices: BugOperationsService = null;
-  closedBugCount: number = 0;
+  bugSortAttribute: string = 'name';
+  bugSortDirection: number = 1;
+
+
   constructor(_bugOperationServices: BugOperationsService) {
     this.bugServices = _bugOperationServices;
    }
