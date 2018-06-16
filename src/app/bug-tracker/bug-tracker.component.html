@@ -1,20 +1,8 @@
 <body>
 	<h1>Bug Tracker</h1>
 	<hr>
-	<section class="stats">
-		<span class="closed">{{getClosedBugCount()}}</span>
-		<span> / </span>
-		<span>{{bugs.length}}</span>
-	</section>
-	<section class="sort">
-		<label for="">Order By :</label>
-		<select name="" id="" (change)='bugSortAttribute = $event.target.value'>
-			<option value="bugName">Name</option>
-			<option value="isClosed">Status</option>
-		</select>
-		<label for="">Descending ? :</label>
-		<input type="checkbox" name="" id="" (change)='bugSortDirection = $event.target.checked? -1 : 1'>
-	</section>
+	<app-bug-stats [data]='bugs'></app-bug-stats>
+	<app-bug-sort></app-bug-sort>
 	<section class="edit">
 		<label for="">Bug Name :</label>
 		<input type="text" name="" id="" (change)='bugName = $event.target.value'>
@@ -24,7 +12,7 @@
 		<ol>
 			<li *ngFor='let bug of (bugs|sortBugs:bugSortAttribute:bugSortDirection)'>
 				<span class="bugname" (click)='onClickBugName(bug)' [ngClass]="bug.isClosed?'closed':'open'">{{bug.bugName | trimTextPipe:40}}</span>
-				<div class="datetime">{{bug.createdAt | date:'short'}}</div>
+				<div class="datetime">{{bug.createdAt|elapsed}}</div>
 			</li>
 			
 		</ol>

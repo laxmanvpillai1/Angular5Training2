@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DoCheck } from '@angular/core';
 import { BugModel } from './bug.model';
 import { BugOperationsService } from './services/bug-operations.service';
+import {HttpClient} from '@angular/common/http'
+import { BugSortComponent } from './views/bug-sort/bug-sort.component';
+import { BugSortService } from './services/bug-sort.service';
 
 @Component({
   selector: 'app-bug-tracker',
   templateUrl: './bug-tracker.component.html',
   styleUrls: ['./bug-tracker.component.css']
 })
-export class BugTrackerComponent implements OnInit {
+export class BugTrackerComponent implements DoCheck {
 
   
   bugs: BugModel[] = [];
@@ -16,12 +19,13 @@ export class BugTrackerComponent implements OnInit {
   bugSortDirection: number = 1;
 
 
-  constructor(_bugOperationServices: BugOperationsService) {
+  constructor(_bugOperationServices: BugOperationsService,
+  _bugSortService: BugSortService) {
     this.bugServices = _bugOperationServices;
    }
 
 
-  ngOnInit() {
+  ngDoCheck() {
     let windowStorageLength: number = window.localStorage.length;
     for(let i=0; i<windowStorageLength; i++){
       this.bugs[i] = JSON.parse(window.localStorage.getItem( window.localStorage.key(i)));
@@ -33,6 +37,7 @@ export class BugTrackerComponent implements OnInit {
     let bugId: string = 'bug' + (window.localStorage.length +1);
     let bug:BugModel = this.bugServices.createNew(bugId, bugName);
     this.bugs = [...this.bugs, bug];
+   
     
   }
 
@@ -51,8 +56,6 @@ export class BugTrackerComponent implements OnInit {
     });
   }
 
-  getClosedBugCount(): number{
-    return this.bugs.reduce((prevResult, bug)=> bug.isClosed ? ++prevResult:prevResult, 0);
-  }
+  
 
 }
